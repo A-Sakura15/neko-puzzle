@@ -1,10 +1,6 @@
 import js
 import random
 
-# # HTML取得
-# title = js.document.querySelector("#title")
-# message = js.document.querySelector("#message")
-
 # Canvas取得
 canvas = js.document.querySelector("#canvas")
 context = canvas.getContext("2d")
@@ -101,45 +97,54 @@ def draw_txt(txt, x, y, siz, col, tg):
 
 # 判定
 def check_neko():
+	mark = []
 	for y in range(ROW):
+		row = []
 		for x in range(COL):
 			check[y][x] = neko[y][x]
+			row.append(False)
+		mark.append(row)
 	
 	# 縦3つチェック
 	for y in range(1, ROW-1):
 		for x in range(COL):
 			n = check[y][x]
-			if check[y][x]>0:
+			if n > 0:
 				if check[y-1][x] == n and check[y+1][x] == n:
-					neko[y-1][x] = 7
-					neko[y][x] = 7
-					neko[y+1][x] = 7
+					mark[y-1][x] = True
+					mark[y][x] = True
+					mark[y+1][x] = True
 	
 	# 横3つチェック
 	for y in range(ROW):
 		for x in range(1, COL-1):
 			n = check[y][x]
-			if check[y][x]>0:
+			if n > 0:
 				if check[y][x-1] == n and check[y][x+1] == n:
-					neko[y][x-1] = 7
-					neko[y][x] = 7
-					neko[y][x+1] = 7
+					mark[y][x-1] = True
+					mark[y][x] = True
+					mark[y][x+1] = True
 	
 	# 斜め3つチェック
 	for y in range(1, ROW-1):
 		for x in range(1, COL-1):
 			n = check[y][x]
-			if check[y][x]>0:
+			if n > 0:
 				# 左上、右下が同じ
 				if check[y-1][x-1] == n and check[y+1][x+1] == n:
-					neko[y-1][x-1] = 7
-					neko[y][x] = 7
-					neko[y+1][x+1] = 7
+					mark[y-1][x-1] = True
+					mark[y][x] = True
+					mark[y+1][x+1] = True
 				# 左下、右上が同じ
 				if check[y+1][x-1] == n and check[y-1][x+1] == n:
-					neko[y+1][x-1] = 7
-					neko[y][x] = 7
-					neko[y-1][x+1] = 7
+					mark[y+1][x-1] = True
+					mark[y][x] = True
+					mark[y-1][x+1] = True
+	
+	for y in range(ROW):
+		for x in range(COL):
+			if mark[y][x]:
+				neko[y][x] = 7
 
 def sweep_neko():
 	num = 0
@@ -177,10 +182,23 @@ def game_main():
 	global cursor_x, cursor_y, mouse_c
 
 	context.clearRect(0, 0, COL*TILE_SIZE, ROW*TILE_SIZE)
-	context.drawImage(img_bg, 0, 0, COL*TILE_SIZE, ROW*TILE_SIZE)
+	# 背景描画
+	context.fillStyle = "lightgray"
+	context.fillRect(0, 0, canvas.width, canvas.height)
+	for y in range(ROW):
+		for x in range(COL):
+			if (x+y)%2 == 0:
+				context.fillStyle = "pink"
+			else:
+				context.fillStyle = "mistyrose"
+			
+			context.fillRect(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE-1, TILE_SIZE-1)
+	
+	# ネコ描画
+	draw_neko()
 
 	if index == 0 or index == 1:
-		draw_txt("ねこねこ", 250, 240, 80, "violet", "TITLE")
+		draw_txt("ねこねこ", 180, 240, 80, "violet", "TITLE")
 		draw_txt("Easy", 280, 400, 40, "white", "TITLE")
 		draw_txt("Normal", 260, 500, 40, "white", "TITLE")
 		draw_txt("Hard", 280, 600, 40, "white", "TITLE")
@@ -204,27 +222,6 @@ def game_main():
 			tsugi = 0
 			set_neko()
 			index = 2
-
-	
-	# elif index == 1:
-	# 	difficulty = 0
-	# 	if mouse_c == 1:
-	# 		if 350 < mouse_y < 450:
-	# 			difficulty = 4
-	# 		if 450 < mouse_y < 550:
-	# 			difficulty = 5
-	# 		if 550 < mouse_y < 650:
-	# 			difficulty = 6
-		
-	# 	if difficulty > 0:
-	# 		for y in range(ROW):
-	# 			for x in range(COL):
-	# 				neko[y][x] = 0
-	# 		mouse_c = 0
-	# 		score = 0
-	# 		tsugi = 0
-	# 		set_neko()
-	# 		index = 2
 	
 	elif index == 2:
 		if not drop_neko():
@@ -251,231 +248,45 @@ def game_main():
 				timer = 0
 	
 	elif index == 5:
-		if 24 <= mouse_x < 24+72*8 and 24 <= mouse_y < 24+72*10:
-			cursor_x = mouse_x // TILE_SIZE
-			cursor_y = mouse_y // TILE_SIZE
-			if 0 <= cursor_x < COL and 0<= cursor_y < ROW:
-				if mouse_c == 1:
-					mouse_c = 0
-					set_neko()
-					neko[cursor_y][cursor_x] = tsugi
-					tsugi = 0
-					index = 2
+		cursor_x = mouse_x // TILE_SIZE
+		cursor_y = mouse_y // TILE_SIZE
+		if 0 <= cursor_x < COL and 0<= cursor_y < ROW:
+			if mouse_c == 1:
+				mouse_c = 0
+				set_neko()
+				neko[cursor_y][cursor_x] = tsugi
+				tsugi = 0
+				index = 2
+		
+			# カーソル描画
+			context.drawImage(
+				img_cursor,
+				cursor_x*TILE_SIZE + 4,
+				cursor_y*TILE_SIZE + 4,
+				TILE_SIZE - 8,
+				TILE_SIZE - 8
+			)
 	
 	elif index == 6:
 		timer += 1
-		if timer == 1:
+		if timer < 50:
 			draw_txt("GAME OVER", 260, 348, 60, "red", "")
 		if timer == 50:
+			difficulty = 0
 			index = 0
 	
-	draw_neko()
+	
 
-	draw_txt(f"SCORE {score}", 120, 50, 30, "blue", "")
-	draw_txt(f"HISC {high_score}", 450, 50, 30, "yellow", "")
+	
+
+	draw_txt(f"SCORE {score}", COL*TILE_SIZE+10, TILE_SIZE*1.5, 30, "blue", "")
+	draw_txt(f"HISC {high_score}", COL*TILE_SIZE+10, TILE_SIZE*2.5, 30, "yellow", "")
+	draw_txt("NEXT", COL*TILE_SIZE+10, TILE_SIZE*3.5, 30, "red", "")
 
 	if tsugi > 0:
-		context.drawImage(img_neko[tsugi], 700, 100, TILE_SIZE, TILE_SIZE)
+		context.drawImage(img_neko[tsugi], 700, TILE_SIZE*3, TILE_SIZE, TILE_SIZE)
 	
 	js.setTimeout(game_main, 100)
 
 # 起動
 game_main()
-
-
-
-
-
-
-
-
-
-
-
-# # 描画関数
-# def draw_board():
-
-# 	# 背景描画
-# 	# canvas.width は右側のUI領域も含めるため、改善の必要があるかも
-# 	# context.fillStyle = "gray"
-# 	# context.fillRect(0, 0, UI_x, canvas.height)
-
-# 	# マウス位置をマス番号に変換
-# 	cursor_x = mouse_x // TILE_SIZE
-# 	cursor_y = mouse_y // TILE_SIZE
-
-# 	# マス目の描画
-# 	for y in range(ROW):
-# 		for x in range(COL):
-			
-# 			# マス目の座標計算
-# 			px = x * TILE_SIZE
-# 			py = y * TILE_SIZE
-
-# 			# # 枠線を描画
-# 			# context.strokeStyle = "black"
-# 			# context.strokeRect(
-# 			# 	px,
-# 			# 	py,
-# 			# 	TILE_SIZE,
-# 			# 	TILE_SIZE
-# 			# )
-
-# 			# マス目をチェッカー柄に変更
-# 			# 色変更時は参照 → https://www.colordic.org/
-# 			if (x+y)%2 == 0:
-# 				context.fillStyle = "pink"
-# 			else:
-# 				context.fillStyle = "mistyrose"
-			
-# 			context.fillRect(px, py, TILE_SIZE-1, TILE_SIZE-1)
-
-# 			# マス番号を表示
-# 			# context.fillStyle = "blue"
-# 			# context.fillText(y*COL+x, px+TILE_SIZE//2, py+TILE_SIZE//2)
-
-# 			# カーソル位置に画像を描画
-# 			if x == cursor_x and y == cursor_y:
-# 				# context.fillStyle = "red"
-# 				context.drawImage(
-# 					img_cursor,
-# 					px + 4,
-# 					py + 4,
-# 					TILE_SIZE - 8,
-# 					TILE_SIZE - 8
-# 				)
-
-# 			# 配列値を取得
-# 			n = neko[y][x]
-
-# 			# 揃ったネコ
-# 			if n == 7:
-# 				context.drawImage(
-# 					img_niku,
-# 					px + 4,
-# 					py + 4,
-# 					TILE_SIZE - 8,
-# 					TILE_SIZE - 8
-# 				)
-# 			# 通常ネコ
-# 			elif n > 0:
-# 				context.drawImage(
-# 					img_neko[n],
-# 					px + 4,
-# 					py + 4,
-# 					TILE_SIZE - 8,
-# 					TILE_SIZE - 8
-# 				)
-
-# 	# UI領域の描画
-# 	context.fillStyle = "paleturquoise"
-# 	context.fillRect(UI_x+1, 0, 200, canvas.height)
-
-# 	# スコアの描画
-# 	context.fillStyle = "black"
-# 	context.font = "20px Arial"
-# 	context.textAlign = "left"
-# 	context.fillText(f"SCORE : {score}", UI_x+10, 25)
-# 	context.fillText(f"HIGH : {high_score}", UI_x+10, 50)
-# 	context.fillText(f"COMBO : {combo}", UI_x+10, 75)
-
-# 	# ゲームオーバー画面の描画
-# 	# ゲームオーバーから復帰した後も、描画が残り続けるバグがある
-# 	if game_over:
-# 		context.fillStyle = "rgba(0,0,0,0.7)"
-# 		context.fillRect(0, 0, canvas.width, canvas.height)
-# 		context.fillStyle = "white"
-# 		context.font = "bold 48px Arial"
-# 		context.textAlign = "center"
-# 		context.fillText("GAME OVER", canvas.width//2, canvas.height//2)
-
-
-
-
-
-# # 消去後に描画する関数
-# def erase_neko():
-# 	sweep_neko()
-# 	drop_loop()
-
-# # drop_neko()をループ
-# def drop_loop():
-# 	moved = drop_neko()
-# 	draw_board()
-
-# 	# まだ落ちるネコがあるなら続行
-# 	if moved:
-# 		js.setTimeout(drop_loop, 100)
-# 	else:
-# 		# ゲームオーバー判定
-# 		global game_over
-# 		if over_neko():
-# 			game_over = True
-# 			draw_board()
-# 			return
-		
-# 		# 落下後に再判定
-# 		check_neko()
-# 		draw_board()
-
-# 		# 揃っているか確認
-# 		found = False
-
-# 		for y in range(ROW):
-# 			for x in range(COL):
-# 				if neko[y][x] == 9:
-# 					found = True
-# 		if found:
-# 			js.setTimeout(erase_neko, 500)
-
-# # クリック処理
-# def canvas_click(event):
-# 	global game_over, score, combo
-
-# 	# ゲームオーバー時のクリック処理
-# 	if game_over:
-# 		# 盤面リセット
-# 		for y in range(ROW):
-# 			for x in range(COL):
-# 				neko[y][x] = 0
-# 		score = 0
-# 		combo = 0
-# 		game_over = False
-# 		draw_board()
-# 		return
-
-# 	# canvasの位置情報を取得
-# 	rect = canvas.getBoundingClientRect()
-
-# 	# canvas内座標へ変換
-# 	mouse_x = int(event.clientX - rect.left)
-# 	mouse_y = int(event.clientY - rect.top)
-
-# 	# マス番号へ変換
-# 	x = mouse_x // TILE_SIZE
-# 	y = mouse_y // TILE_SIZE
-
-# 	# 範囲チェック
-# 	if 0 <= x < COL and 0<= y < ROW:
-
-# 		# ランダムなネコを配置
-# 		if neko[y][x] == 0:
-# 			neko[y][x] = random.randint(1, 3)
-# 			set_neko()
-# 		else:
-# 			neko[y][x] = 0 
-
-# 		# 再描画
-# 		check_neko()
-# 		draw_board()
-
-# 		# 0.5秒後に消去
-# 		js.setTimeout(erase_neko, 500)
-
-
-# # イベント登録
-# canvas.addEventListener("click", canvas_click)
-
-
-# # 初回描画
-# draw_board()
