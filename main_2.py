@@ -28,7 +28,7 @@ img_neko.append(load_img("./assets/neko_niku.png"))
 # サイズ定義
 COL = 8
 ROW = 10
-TILE_SIZE = min(win_w//COL, win_h//ROW)
+TILE_SIZE = min(win_w//(COL+3), win_h//ROW)
 UI_width = int(TILE_SIZE * 3)
 
 # Canvasサイズ変更
