@@ -198,7 +198,7 @@ def game_main():
 	draw_neko()
 
 	if index == 0 or index == 1:
-		draw_txt("ねこねこ", 180, 240, 80, "violet", "TITLE")
+		draw_txt("Neko-Puzzle", 180, 240, 80, "violet", "TITLE")
 		draw_txt("Easy", 280, 400, 40, "white", "TITLE")
 		draw_txt("Normal", 260, 500, 40, "white", "TITLE")
 		draw_txt("Hard", 280, 600, 40, "white", "TITLE")
