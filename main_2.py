@@ -28,11 +28,11 @@ img_neko.append(load_img("./assets/neko_niku.png"))
 # サイズ定義
 COL = 8
 ROW = 10
-TILE_SIZE = min(win_w//(COL+3), win_h//ROW)
+TILE_SIZE = min((win_w-30)//(COL+3), (win_h-30)//ROW)
 UI_width = int(TILE_SIZE * 3)
 
 # Canvasサイズ変更
-canvas.width = TILE_SIZE * COL+ UI_width
+canvas.width = TILE_SIZE * COL + UI_width
 canvas.height = TILE_SIZE * ROW
 
 # UI領域の始点
@@ -94,7 +94,7 @@ def draw_neko():
 def draw_txt(txt, x, y, siz, col, tg):
 	context.fillStyle = "black"
 	context.font = f"bold {siz}px serif"
-	context.fillText(txt, x+2, y+2)
+	context.fillText(txt, x+1, y+1)
 
 	context.fillStyle = col
 	context.fillText(txt, x, y)
@@ -202,19 +202,19 @@ def game_main():
 	draw_neko()
 
 	if index == 0 or index == 1:
-		draw_txt("Neko_Puzzle", 100, 240, 80, "violet", "TITLE")
-		draw_txt("Easy", 280, 400, 40, "white", "TITLE")
-		draw_txt("Normal", 260, 500, 40, "white", "TITLE")
-		draw_txt("Hard", 280, 600, 40, "white", "TITLE")
+		draw_txt("Neko_Puzzle", TILE_SIZE, TILE_SIZE*3, TILE_SIZE, "violet", "TITLE")
+		draw_txt("Easy", TILE_SIZE, TILE_SIZE*5, TILE_SIZE, "white", "TITLE")
+		draw_txt("Normal", TILE_SIZE, TILE_SIZE*7, TILE_SIZE, "white", "TITLE")
+		draw_txt("Hard", TILE_SIZE, TILE_SIZE*9, TILE_SIZE, "white", "TITLE")
 		index = 1
 
 		if mouse_c == 1:
 			mouse_c = 0
-			if 350 < mouse_y < 450:
+			if TILE_SIZE*4 < mouse_y < TILE_SIZE*5:
 				difficulty = 4
-			if 450 < mouse_y < 550:
+			if TILE_SIZE*6 < mouse_y < TILE_SIZE*7:
 				difficulty = 5
-			if 550 < mouse_y < 650:
+			if TILE_SIZE*8 < mouse_y < TILE_SIZE*9:
 				difficulty = 6
 		
 		if difficulty > 0:
@@ -282,15 +282,15 @@ def game_main():
 	
 
 	
-
-	draw_txt(f"SCORE {score}", COL*TILE_SIZE+10, TILE_SIZE*1.5, 30, "blue", "")
-	draw_txt(f"HISC {high_score}", COL*TILE_SIZE+10, TILE_SIZE*2.5, 30, "yellow", "")
-	draw_txt("NEXT", COL*TILE_SIZE+10, TILE_SIZE*3.5, 30, "red", "")
-	draw_txt(f"Win_w {win_w}", COL*TILE_SIZE+10, TILE_SIZE*4.5, 30, "orange", "")
-	draw_txt(f"Win_h {win_h}", COL*TILE_SIZE+10, TILE_SIZE*5.5, 30, "orange", "")
+	# tile_sizeがどんな値でも崩れないようにする
+	draw_txt(f"SCORE {score}", (COL+0.5)*TILE_SIZE, TILE_SIZE*1.5, TILE_SIZE*0.4, "blue", "")
+	draw_txt(f"HISC {high_score}", (COL+0.5)*TILE_SIZE, TILE_SIZE*2.5, TILE_SIZE*0.4, "yellow", "")
+	draw_txt("NEXT", (COL+0.5)*TILE_SIZE, TILE_SIZE*3.5, TILE_SIZE*0.4, "red", "")
+	draw_txt(f"Win_w {win_w}", (COL+0.5)*TILE_SIZE, TILE_SIZE*4.5, TILE_SIZE*0.4, "orange", "")
+	draw_txt(f"Win_h {win_h}", (COL+0.5)*TILE_SIZE, TILE_SIZE*5.5, TILE_SIZE*0.4, "orange", "")
 
 	if tsugi > 0:
-		context.drawImage(img_neko[tsugi], 700, TILE_SIZE*3, TILE_SIZE, TILE_SIZE)
+		context.drawImage(img_neko[tsugi], (COL+2)*TILE_SIZE, TILE_SIZE*3, TILE_SIZE*0.5, TILE_SIZE*0.5)
 	
 	js.setTimeout(game_main, 100)
 
