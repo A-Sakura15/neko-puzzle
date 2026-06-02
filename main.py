@@ -288,6 +288,10 @@ def game_main():
 	draw_txt("NEXT", (COL+0.5)*TILE_SIZE, TILE_SIZE*3.5, TILE_SIZE*0.4, "red", "")
 	draw_txt(f"Win_w {win_w}", (COL+0.5)*TILE_SIZE, TILE_SIZE*4.5, TILE_SIZE*0.4, "orange", "")
 	draw_txt(f"Win_h {win_h}", (COL+0.5)*TILE_SIZE, TILE_SIZE*5.5, TILE_SIZE*0.4, "orange", "")
+	if win_w > win_h:
+		draw_txt("PC用UI", (COL+0.5)*TILE_SIZE, TILE_SIZE*6.5, TILE_SIZE*0.4, "green", "")
+	else:
+		draw_txt("スマホ用UI", (COL+0.5)*TILE_SIZE, TILE_SIZE*6.5, TILE_SIZE*0.4, "green", "")
 
 	if tsugi > 0:
 		context.drawImage(img_neko[tsugi], (COL+2)*TILE_SIZE, TILE_SIZE*3, TILE_SIZE*0.5, TILE_SIZE*0.5)
