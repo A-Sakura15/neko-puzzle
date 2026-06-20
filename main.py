@@ -3,6 +3,12 @@ import random
 
 win_w = js.window.innerWidth
 win_h = js.window.innerHeight
+yoko = 0
+tate = 1
+if win_w > win_h:
+	UI_mode = yoko
+else:
+	UI_mode = tate
 
 # Canvas取得
 canvas = js.document.querySelector("#canvas")
@@ -28,15 +34,26 @@ img_neko.append(load_img("./assets/neko_niku.png"))
 # サイズ定義
 COL = 8
 ROW = 10
-TILE_SIZE = min((win_w-30)//(COL+3), (win_h-30)//ROW)
-UI_width = int(TILE_SIZE * 3)
+# 要確認
+if UI_mode == tate:
+	TILE_SIZE = min((win_w-30)//COL, (win_h-30)//(ROW+2))
+	UI_height = int(TILE_SIZE * 2)
+else:
+	TILE_SIZE = min((win_w-30)//(COL+3), (win_h-30)//ROW)
+	UI_width = int(TILE_SIZE * 3)
 
 # Canvasサイズ変更
-canvas.width = TILE_SIZE * COL + UI_width
-canvas.height = TILE_SIZE * ROW
+# 要確認
+if UI_mode == tate:
+	canvas.width = TILE_SIZE * COL
+	canvas.height = TILE_SIZE * ROW + UI_height
+else:
+	canvas.width = TILE_SIZE * COL + UI_width
+	canvas.height = TILE_SIZE * ROW
 
 # UI領域の始点
 UI_x = COL*TILE_SIZE
+UI_y = ROW*TILE_SIZE
 
 # マウス変数
 cursor_x = 0
@@ -263,18 +280,20 @@ def game_main():
 				index = 2
 		
 			# カーソル描画
-			context.drawImage(
-				img_cursor,
-				cursor_x*TILE_SIZE + 4,
-				cursor_y*TILE_SIZE + 4,
-				TILE_SIZE - 8,
-				TILE_SIZE - 8
-			)
+			if UI_mode == yoko:
+				context.drawImage(
+					img_cursor,
+					cursor_x*TILE_SIZE + 4,
+					cursor_y*TILE_SIZE + 4,
+					TILE_SIZE - 8,
+					TILE_SIZE - 8
+				)
 	
 	elif index == 6:
 		timer += 1
 		if timer < 50:
-			draw_txt("GAME OVER", 260, 348, 60, "red", "")
+			# 要確認
+			draw_txt("GAME OVER", TILE_SIZE, TILE_SIZE*5, TILE_SIZE, "red", "")
 		if timer == 50:
 			difficulty = 0
 			index = 0
@@ -283,18 +302,24 @@ def game_main():
 
 	
 	# tile_sizeがどんな値でも崩れないようにする
-	draw_txt(f"SCORE {score}", (COL+0.5)*TILE_SIZE, TILE_SIZE*1.5, TILE_SIZE*0.4, "blue", "")
-	draw_txt(f"HISC {high_score}", (COL+0.5)*TILE_SIZE, TILE_SIZE*2.5, TILE_SIZE*0.4, "yellow", "")
-	draw_txt("NEXT", (COL+0.5)*TILE_SIZE, TILE_SIZE*3.5, TILE_SIZE*0.4, "red", "")
-	draw_txt(f"Win_w {win_w}", (COL+0.5)*TILE_SIZE, TILE_SIZE*4.5, TILE_SIZE*0.4, "orange", "")
-	draw_txt(f"Win_h {win_h}", (COL+0.5)*TILE_SIZE, TILE_SIZE*5.5, TILE_SIZE*0.4, "orange", "")
-	if win_w > win_h:
-		draw_txt("PC用UI", (COL+0.5)*TILE_SIZE, TILE_SIZE*6.5, TILE_SIZE*0.4, "green", "")
+	if UI_mode:
+		draw_txt(f"SCORE {score}", TILE_SIZE*0.5, (ROW+0.5)*TILE_SIZE, TILE_SIZE*0.4, "blue", "")
+		draw_txt(f"HISC {high_score}", TILE_SIZE*0.5, (ROW+1.5)*TILE_SIZE, TILE_SIZE*0.4, "yellow", "")
+		draw_txt("NEXT", TILE_SIZE*4.5, (ROW+0.5)*TILE_SIZE, TILE_SIZE*0.4, "red", "")
+		# draw_txt(f"Win_w {win_w}", TILE_SIZE*4.5, (ROW+1.5)*TILE_SIZE, TILE_SIZE*0.4, "orange", "")
+		# draw_txt(f"Win_h {win_h}", TILE_SIZE*4.5, (ROW+1.5)*TILE_SIZE, TILE_SIZE*0.4, "orange", "")
+		draw_txt("スマホ用UI", TILE_SIZE*4.5, (ROW+1.5)*TILE_SIZE, TILE_SIZE*0.4, "green", "")
+		if tsugi > 0:
+			context.drawImage(img_neko[tsugi], TILE_SIZE*6, (ROW+0.2)*TILE_SIZE, TILE_SIZE*0.5, TILE_SIZE*0.5)
 	else:
-		draw_txt("スマホ用UI", (COL+0.5)*TILE_SIZE, TILE_SIZE*6.5, TILE_SIZE*0.4, "green", "")
-
-	if tsugi > 0:
-		context.drawImage(img_neko[tsugi], (COL+2)*TILE_SIZE, TILE_SIZE*3, TILE_SIZE*0.5, TILE_SIZE*0.5)
+		draw_txt(f"SCORE {score}", (COL+0.5)*TILE_SIZE, TILE_SIZE*1.5, TILE_SIZE*0.4, "blue", "")
+		draw_txt(f"HISC {high_score}", (COL+0.5)*TILE_SIZE, TILE_SIZE*2.5, TILE_SIZE*0.4, "yellow", "")
+		draw_txt("NEXT", (COL+0.5)*TILE_SIZE, TILE_SIZE*3.5, TILE_SIZE*0.4, "red", "")
+		draw_txt(f"Win_w {win_w}", (COL+0.5)*TILE_SIZE, TILE_SIZE*4.5, TILE_SIZE*0.4, "orange", "")
+		draw_txt(f"Win_h {win_h}", (COL+0.5)*TILE_SIZE, TILE_SIZE*5.5, TILE_SIZE*0.4, "orange", "")
+		draw_txt("PC用UI", (COL+0.5)*TILE_SIZE, TILE_SIZE*6.5, TILE_SIZE*0.4, "green", "")
+		if tsugi > 0:
+			context.drawImage(img_neko[tsugi], (COL+2)*TILE_SIZE, TILE_SIZE*3, TILE_SIZE*0.5, TILE_SIZE*0.5)
 	
 	js.setTimeout(game_main, 100)
 
