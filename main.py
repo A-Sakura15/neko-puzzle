@@ -34,7 +34,6 @@ img_neko.append(load_img("./assets/neko_niku.png"))
 # サイズ定義
 COL = 8
 ROW = 10
-# 要確認
 if UI_mode == tate:
 	TILE_SIZE = min((win_w-30)//COL, (win_h-30)//(ROW+2))
 	UI_height = int(TILE_SIZE * 2)
@@ -43,7 +42,6 @@ else:
 	UI_width = int(TILE_SIZE * 3)
 
 # Canvasサイズ変更
-# 要確認
 if UI_mode == tate:
 	canvas.width = TILE_SIZE * COL
 	canvas.height = TILE_SIZE * ROW + UI_height
@@ -110,7 +108,7 @@ def draw_neko():
 
 def draw_txt(txt, x, y, siz, col, tg):
 	context.fillStyle = "black"
-	context.font = f"bold {siz}px serif"
+	context.font = f"bold {siz}px Noto Sans"
 	context.fillText(txt, x+1, y+1)
 
 	context.fillStyle = col
@@ -219,7 +217,7 @@ def game_main():
 	draw_neko()
 
 	if index == 0 or index == 1:
-		draw_txt("Neko_Puzzle", TILE_SIZE, TILE_SIZE*3, TILE_SIZE, "violet", "TITLE")
+		draw_txt("Puzzle_Game", TILE_SIZE, TILE_SIZE*3, TILE_SIZE, "violet", "TITLE")
 		draw_txt("Easy", TILE_SIZE, TILE_SIZE*5, TILE_SIZE, "white", "TITLE")
 		draw_txt("Normal", TILE_SIZE, TILE_SIZE*7, TILE_SIZE, "white", "TITLE")
 		draw_txt("Hard", TILE_SIZE, TILE_SIZE*9, TILE_SIZE, "white", "TITLE")
