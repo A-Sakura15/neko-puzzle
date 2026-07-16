@@ -202,14 +202,14 @@ def game_main():
 
 	context.clearRect(0, 0, COL*TILE_SIZE, ROW*TILE_SIZE)
 	# 背景描画
-	context.fillStyle = "lightgray"
+	context.fillStyle = "#dddddd"
 	context.fillRect(0, 0, canvas.width, canvas.height)
 	for y in range(ROW):
 		for x in range(COL):
 			if (x+y)%2 == 0:
-				context.fillStyle = "pink"
+				context.fillStyle = "#555555"
 			else:
-				context.fillStyle = "mistyrose"
+				context.fillStyle = "#aaaaaa"
 			
 			context.fillRect(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE-1, TILE_SIZE-1)
 	
@@ -217,10 +217,10 @@ def game_main():
 	draw_neko()
 
 	if index == 0 or index == 1:
-		draw_txt("Puzzle_Game", TILE_SIZE, TILE_SIZE*3, TILE_SIZE, "violet", "TITLE")
-		draw_txt("Easy", TILE_SIZE, TILE_SIZE*5, TILE_SIZE, "white", "TITLE")
-		draw_txt("Normal", TILE_SIZE, TILE_SIZE*7, TILE_SIZE, "white", "TITLE")
-		draw_txt("Hard", TILE_SIZE, TILE_SIZE*9, TILE_SIZE, "white", "TITLE")
+		draw_txt("Puzzle_Game", TILE_SIZE, TILE_SIZE*3, TILE_SIZE, "#222222", "TITLE")
+		draw_txt("Easy", TILE_SIZE, TILE_SIZE*5, TILE_SIZE, "#ffffff", "TITLE")
+		draw_txt("Normal", TILE_SIZE, TILE_SIZE*7, TILE_SIZE, "#ffffff", "TITLE")
+		draw_txt("Hard", TILE_SIZE, TILE_SIZE*9, TILE_SIZE, "#ffffff", "TITLE")
 		index = 1
 
 		if mouse_c == 1:
@@ -301,21 +301,21 @@ def game_main():
 	
 	# tile_sizeがどんな値でも崩れないようにする
 	if UI_mode:
-		draw_txt(f"SCORE {score}", TILE_SIZE*0.5, (ROW+0.5)*TILE_SIZE, TILE_SIZE*0.4, "blue", "")
-		draw_txt(f"HISC {high_score}", TILE_SIZE*0.5, (ROW+1.5)*TILE_SIZE, TILE_SIZE*0.4, "yellow", "")
-		draw_txt("NEXT", TILE_SIZE*4.5, (ROW+0.5)*TILE_SIZE, TILE_SIZE*0.4, "red", "")
+		draw_txt(f"SCORE {score}", TILE_SIZE*0.5, (ROW+0.5)*TILE_SIZE, TILE_SIZE*0.4, "#222222", "")
+		draw_txt(f"HISC {high_score}", TILE_SIZE*0.5, (ROW+1.5)*TILE_SIZE, TILE_SIZE*0.4, "#222222", "")
+		draw_txt("NEXT", TILE_SIZE*4.5, (ROW+0.5)*TILE_SIZE, TILE_SIZE*0.4, "#222222", "")
 		# draw_txt(f"Win_w {win_w}", TILE_SIZE*4.5, (ROW+1.5)*TILE_SIZE, TILE_SIZE*0.4, "orange", "")
 		# draw_txt(f"Win_h {win_h}", TILE_SIZE*4.5, (ROW+1.5)*TILE_SIZE, TILE_SIZE*0.4, "orange", "")
-		draw_txt("スマホ用UI", TILE_SIZE*4.5, (ROW+1.5)*TILE_SIZE, TILE_SIZE*0.4, "green", "")
+		draw_txt("スマホ用UI", TILE_SIZE*4.5, (ROW+1.5)*TILE_SIZE, TILE_SIZE*0.4, "#222222", "")
 		if tsugi > 0:
 			context.drawImage(img_neko[tsugi], TILE_SIZE*6, (ROW+0.2)*TILE_SIZE, TILE_SIZE*0.5, TILE_SIZE*0.5)
 	else:
-		draw_txt(f"SCORE {score}", (COL+0.5)*TILE_SIZE, TILE_SIZE*1.5, TILE_SIZE*0.4, "blue", "")
-		draw_txt(f"HISC {high_score}", (COL+0.5)*TILE_SIZE, TILE_SIZE*2.5, TILE_SIZE*0.4, "yellow", "")
-		draw_txt("NEXT", (COL+0.5)*TILE_SIZE, TILE_SIZE*3.5, TILE_SIZE*0.4, "red", "")
-		draw_txt(f"Win_w {win_w}", (COL+0.5)*TILE_SIZE, TILE_SIZE*4.5, TILE_SIZE*0.4, "orange", "")
-		draw_txt(f"Win_h {win_h}", (COL+0.5)*TILE_SIZE, TILE_SIZE*5.5, TILE_SIZE*0.4, "orange", "")
-		draw_txt("PC用UI", (COL+0.5)*TILE_SIZE, TILE_SIZE*6.5, TILE_SIZE*0.4, "green", "")
+		draw_txt(f"SCORE {score}", (COL+0.5)*TILE_SIZE, TILE_SIZE*1.5, TILE_SIZE*0.4, "#222222", "")
+		draw_txt(f"HISC {high_score}", (COL+0.5)*TILE_SIZE, TILE_SIZE*2.5, TILE_SIZE*0.4, "#222222", "")
+		draw_txt("NEXT", (COL+0.5)*TILE_SIZE, TILE_SIZE*3.5, TILE_SIZE*0.4, "#222222", "")
+		draw_txt(f"Win_w {win_w}", (COL+0.5)*TILE_SIZE, TILE_SIZE*4.5, TILE_SIZE*0.4, "#222222", "")
+		draw_txt(f"Win_h {win_h}", (COL+0.5)*TILE_SIZE, TILE_SIZE*5.5, TILE_SIZE*0.4, "#222222", "")
+		draw_txt("PC用UI", (COL+0.5)*TILE_SIZE, TILE_SIZE*6.5, TILE_SIZE*0.4, "#222222", "")
 		if tsugi > 0:
 			context.drawImage(img_neko[tsugi], (COL+2)*TILE_SIZE, TILE_SIZE*3, TILE_SIZE*0.5, TILE_SIZE*0.5)
 	
