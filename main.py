@@ -217,10 +217,10 @@ def game_main():
 	draw_neko()
 
 	if index == 0 or index == 1:
-		draw_txt("Puzzle_Game", TILE_SIZE, TILE_SIZE*3, TILE_SIZE, "#222222", "TITLE")
-		draw_txt("Easy", TILE_SIZE, TILE_SIZE*5, TILE_SIZE, "#ffffff", "TITLE")
-		draw_txt("Normal", TILE_SIZE, TILE_SIZE*7, TILE_SIZE, "#ffffff", "TITLE")
-		draw_txt("Hard", TILE_SIZE, TILE_SIZE*9, TILE_SIZE, "#ffffff", "TITLE")
+		draw_txt("Block_Puzzle", TILE_SIZE, TILE_SIZE*3, TILE_SIZE, "#ffffff", "TITLE")
+		draw_txt("Easy", TILE_SIZE, TILE_SIZE*5, TILE_SIZE, "#55ff55", "TITLE")
+		draw_txt("Normal", TILE_SIZE, TILE_SIZE*7, TILE_SIZE, "#7777ff", "TITLE")
+		draw_txt("Hard", TILE_SIZE, TILE_SIZE*9, TILE_SIZE, "#ff5555", "TITLE")
 		index = 1
 
 		if mouse_c == 1:
